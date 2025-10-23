@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Boost Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f0f5; /* Light gray background */
+        }
+        .instagram-gradient {
+            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+        }
+        .card {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
+        .input-style:focus {
+            border-color: #3b82f6;
+            outline: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- Main Application Container -->
+    <div class="w-full max-w-lg bg-white rounded-3xl p-6 md:p-8 card relative">
+        
+        <!-- Header -->
+        <header class="text-center mb-6">
+            <div class="instagram-gradient w-16 h-16 rounded-2xl mx-auto flex items-center justify-center mb-3">
+                <!-- Instagram Icon Placeholder (SVG) -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-extrabold text-gray-900">Social Service Calculator</h1>
+            <p class="text-gray-500 mt-1 text-sm">Rates are fixed (Hardcoded in code). **Edit the code below to change rates.**</p>
+        </header>
+
+        <!-- CALCULATOR VIEW (USER PANEL) -->
+        <div id="userPanel" class="space-y-4">
+            
+            <!-- Price List (Reference) - Static rates will be displayed here -->
+            <div class="mb-6 bg-yellow-50 p-4 rounded-xl border border-yellow-200">
+                <h2 class="text-xl font-bold text-gray-700 mb-3 flex items-center">
+                    <span class="mr-2 text-yellow-600">⭐</span> Current Rates
+                </h2>
+                <ul class="text-gray-600 space-y-1 text-sm font-medium" id="currentRatesList">
+                    <!-- Rates will be filled by JavaScript -->
+                    <li>Views Rate: ₹...</li>
+                    <li>Likes Rate: ₹...</li>
+                    <li>Followers Rate: ₹...</li>
+                </ul>
+            </div>
+
+            <form id="orderForm" class="space-y-4">
+                
+                <!-- Views Section -->
+                <div class="p-3 bg-indigo-50 rounded-lg">
+                    <label for="viewsQty" class="block text-sm font-semibold text-indigo-700 mb-1">Total Views (In Thousands)</label>
+                    <input type="number" id="viewsQty" min="0" value="0" class="w-full p-2 border-2 border-indigo-200 rounded-lg focus:border-indigo-500 focus:outline-none transition" oninput="calculateTotal()">
+                    <p id="viewsPrice" class="text-xs mt-1 text-indigo-600 font-medium">Views Cost: ₹0</p>
+                </div>
+
+                <!-- Likes Section -->
+                <div class="p-3 bg-pink-50 rounded-lg">
+                    <label for="likesQty" class="block text-sm font-semibold text-pink-700 mb-1">Total Likes (In Thousands)</label>
+                    <input type="number" id="likesQty" min="0" value="0" class="w-full p-2 border-2 border-pink-200 rounded-lg focus:border-pink-500 focus:outline-none transition" oninput="calculateTotal()">
+                    <p id="likesPrice" class="text-xs mt-1 text-pink-600 font-medium">Likes Cost: ₹0</p>
+                </div>
+
+                <!-- Followers Section -->
+                <div class="p-3 bg-green-50 rounded-lg">
+                    <label for="followersQty" class="block text-sm font-semibold text-green-700 mb-1">Total Followers (In Hundreds)</label>
+                    <input type="number" id="followersQty" min="0" value="0" class="w-full p-2 border-2 border-green-200 rounded-lg focus:border-green-500 focus:outline-none transition" oninput="calculateTotal()">
+                    <p id="followersPrice" class="text-xs mt-1 text-green-600 font-medium">Followers Cost: ₹0</p>
+                </div>
+                
+                <!-- Instagram Handle -->
+                <div>
+                    <label for="handle" class="block text-sm font-semibold text-gray-700 mb-1">Your Instagram Handle</label>
+                    <input type="text" id="handle" placeholder="@your_username_here" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none">
+                </div>
+
+                <!-- Total Price Display -->
+                <div class="p-4 bg-gray-800 text-white rounded-xl flex justify-between items-center mt-6">
+                    <span class="text-lg font-semibold">Estimated Total:</span>
+                    <span id="totalPrice" class="text-3xl font-extrabold text-yellow-400">₹0</span>
+                </div>
+
+                <!-- Call to Action Button - Opens direct link -->
+                <button type="button" onclick="placeOrder()" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-3 rounded-xl transition duration-300 shadow-lg shadow-pink-300/50 flex items-center justify-center">
+                    <span class="text-xl">DM to Confirm Order and Price</span>
+                </button>
+                <p class="text-center text-xs text-gray-500 mt-2">Clicking will open the Instagram profile. Please confirm the final price there.</p>
+            </form>
+        </div>
+
+        <!-- Message Box Overlay -->
+        <div id="messageBox" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden items-center justify-center p-4 z-50">
+            <div class="bg-white p-6 rounded-xl w-full max-w-sm text-center shadow-2xl">
+                <h3 id="messageTitle" class="text-xl font-bold mb-3 text-gray-800">Alert!</h3>
+                <p id="messageContent" class="text-gray-600 mb-4 text-sm"></p>
+                <button onclick="closeMessageBox()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium">Close</button>
+            </div>
+        </div>
+        
+    </div>
+
+
+    <script>
+        // ==============================================================================
+        // CORE CALCULATOR LOGIC (STATIC RATES)
+        // Rate Change Instructions:
+        // ***************************************************************
+        // ** Yahan currentRates object mein values badalkar rates change karein **
+        // ***************************************************************
+        // ==============================================================================
+        
+        // Hardcoded Rates (Fixed rates) - IN RUPEES
+        const currentRates = {
+            viewsPerThousand: 0.0002, // Views Rate (Per 1,000 Views)
+            likesPerThousand: 0.06, // Likes Rate (Per 1,000 Likes)
+            followersPerHundred: 0.10 // Followers Rate (Per 100 Followers)
+        };
+
+        // Target Instagram Link for the Call-to-Action
+        const targetProfileLink = 'https://www.instagram.com/xx_ishan_king_786?igsh=MjV0YWx4dnprOW05';
+
+        // Calculates the price for a specific item based on quantity and rate
+        function calculateItemPrice(qty, type) {
+            if (qty <= 0) return 0;
+            
+            let rate = 0;
+            if (type === 'views') {
+                rate = currentRates.viewsPerThousand; 
+            } else if (type === 'likes') {
+                rate = currentRates.likesPerThousand; 
+            } else if (type === 'followers') {
+                rate = currentRates.followersPerHundred;
+            }
+            
+            if (isNaN(rate)) return 0;
+            return qty * rate;
+        }
+
+        // Calculates the total price and updates the UI
+        window.calculateTotal = function() {
+            try {
+                const viewsQty = parseFloat(document.getElementById('viewsQty').value || 0) || 0;
+                const likesQty = parseFloat(document.getElementById('likesQty').value || 0) || 0;
+                const followersQty = parseFloat(document.getElementById('followersQty').value || 0) || 0;
+
+                const viewsCost = calculateItemPrice(viewsQty, 'views');
+                const likesCost = calculateItemPrice(likesQty, 'likes');
+                const followersCost = calculateItemPrice(followersQty, 'followers');
+                const total = viewsCost + likesCost + followersCost;
+
+                // Format rates for display
+                const viewsRate = currentRates.viewsPerThousand.toFixed(2);
+                const likesRate = currentRates.likesPerThousand.toFixed(2);
+                const followersRate = currentRates.followersPerHundred.toFixed(2);
+                
+                // Update individual costs
+                document.getElementById('viewsPrice').textContent = `Views Cost: ₹${viewsCost.toFixed(2)} (Rate: ₹${viewsRate} / 1K)`;
+                document.getElementById('likesPrice').textContent = `Likes Cost: ₹${likesCost.toFixed(2)} (Rate: ₹${likesRate} / 1K)`;
+                document.getElementById('followersPrice').textContent = `Followers Cost: ₹${followersCost.toFixed(2)} (Rate: ₹${followersRate} / 100)`;
+                
+                // Update total cost (Rounded to nearest whole rupee)
+                document.getElementById('totalPrice').textContent = `₹${total.toFixed(0)}`; 
+
+            } catch (error) {
+                console.error("Calculation Error:", error);
+                document.getElementById('totalPrice').textContent = `₹ERR`;
+            }
+        }
+        
+        // Opens the target Instagram profile link
+        window.placeOrder = function() {
+            window.open(targetProfileLink, '_blank');
+        }
+
+        // Updates the current rates display list in the user panel
+        function updateRatesDisplay() {
+            const ul = document.getElementById('currentRatesList');
+            const vRate = currentRates.viewsPerThousand;
+            const lRate = currentRates.likesPerThousand;
+            const fRate = currentRates.followersPerHundred;
+
+            ul.innerHTML = `
+                <li>Views Rate (Per 1K): ₹${vRate.toFixed(2)}</li>
+                <li>Likes Rate (Per 1K): ₹${lRate.toFixed(2)}</li>
+                <li>Followers Rate (Per 100): ₹${fRate.toFixed(2)}</li>
+            `;
+        }
+
+        // ==============================================================================
+        // UTILITY FUNCTIONS
+        // ==============================================================================
+        
+        // Function to show a custom message box (instead of alert())
+        window.showMessageBox = function(title, content) {
+            document.getElementById('messageTitle').textContent = title;
+            document.getElementById('messageContent').innerHTML = content;
+            document.getElementById('messageBox').classList.remove('hidden');
+            document.getElementById('messageBox').classList.add('flex');
+        }
+
+        // Function to close the custom message box
+        window.closeMessageBox = function() {
+             document.getElementById('messageBox').classList.remove('flex');
+             document.getElementById('messageBox').classList.add('hidden');
+        }
+
+        // Initialize display on load
+        window.onload = function() {
+            updateRatesDisplay();
+            calculateTotal();
+        };
+    </script>
+</body>
+</html>
